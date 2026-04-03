@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Contact Us — DiSSMaC Global</title>
+<link rel="stylesheet" href="shared.css"/>
+<style>
+.main-content{position:relative;z-index:1}
+.contact-wrap{padding:5rem 2rem;max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1.4fr;gap:4rem;align-items:start}
+@media(max-width:768px){.contact-wrap{grid-template-columns:1fr;gap:3rem}}
+.contact-info .section-desc{margin-top:1rem;margin-bottom:2.5rem;max-width:380px}
+.info-cards{display:flex;flex-direction:column;gap:1rem}
+.info-card{background:var(--dark2);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:1.3rem 1.5rem;display:flex;gap:1rem;align-items:center;transition:border-color .3s,transform .3s}
+.info-card:hover{border-color:rgba(232,25,44,.25);transform:translateX(4px)}
+.info-icon{font-size:1.4rem;flex-shrink:0}
+.info-label{font-size:.72rem;color:var(--grey);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:.2rem}
+.info-value{font-size:.92rem;color:var(--white);font-weight:500}
+
+.social-row{display:flex;gap:.8rem;margin-top:2rem;flex-wrap:wrap}
+.social-btn{background:var(--dark2);border:1px solid rgba(255,255,255,.1);color:var(--grey);padding:.55rem 1.1rem;border-radius:6px;font-size:.82rem;transition:all .2s;display:flex;align-items:center;gap:.4rem}
+.social-btn:hover{border-color:rgba(232,25,44,.35);color:var(--red);background:rgba(232,25,44,.07)}
+
+/* FORM */
+.contact-form-card{background:var(--dark2);border:1px solid rgba(232,25,44,.15);border-radius:12px;padding:2.5rem}
+.contact-form-card h3{font-family:var(--font-head);font-size:2rem;letter-spacing:1px;color:var(--white);margin-bottom:.4rem}
+.contact-form-card>p{font-size:.88rem;color:var(--grey);margin-bottom:2rem;font-weight:300}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
+@media(max-width:480px){.form-row{grid-template-columns:1fr}}
+.form-group{display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.2rem}
+.form-group label{font-size:.75rem;color:var(--grey);letter-spacing:1px;text-transform:uppercase;font-weight:500}
+.form-group input,.form-group textarea,.form-group select{background:var(--dark3);border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:.85rem 1rem;color:var(--white);font-family:var(--font-body);font-size:.95rem;transition:border-color .2s,box-shadow .2s;appearance:none;-webkit-appearance:none}
+.form-group select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 1rem center}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{outline:none;border-color:var(--red);box-shadow:0 0 0 3px rgba(232,25,44,.1)}
+.form-group input::placeholder,.form-group textarea::placeholder{color:rgba(136,136,136,.6)}
+.form-group textarea{resize:vertical}
+
+.submit-row{display:flex;align-items:center;gap:1.2rem;margin-top:.5rem;flex-wrap:wrap}
+.form-note{font-size:.78rem;color:var(--grey);flex:1;min-width:200px;line-height:1.5}
+#submit-btn{min-width:160px}
+#form-success{display:none;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);color:#4ade80;border-radius:8px;padding:1rem 1.5rem;font-size:.9rem;margin-top:1rem;line-height:1.5}
+
+/* MAP-STYLE BLOCK */
+.location-section{background:var(--dark2);border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06);padding:5rem 2rem;text-align:center}
+.location-inner{max-width:700px;margin:0 auto}
+.map-placeholder{background:var(--dark3);border:1px solid rgba(255,255,255,.07);border-radius:10px;height:220px;margin-top:2rem;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.8rem;color:var(--grey);font-size:.9rem;position:relative;overflow:hidden}
+.map-placeholder::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(232,25,44,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(232,25,44,.04) 1px,transparent 1px);background-size:40px 40px}
+.map-placeholder .pin{font-size:2.5rem;position:relative;z-index:1;animation:bounce 2s infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.map-placeholder p{position:relative;z-index:1}
+</style>
+</head>
+<body>
+<div id="sidebar-overlay" onclick="closeSidebar()"></div>
+<nav id="sidebar">
+  <div class="sidebar-header"><div class="sidebar-logo">Di<span>SS</span>MaC</div><button id="close-btn" onclick="closeSidebar()">✕</button></div>
+  <ul class="nav-list">
+    <li><a href="index.html" class="nav-link"><span>🏠 Home</span></a></li>
+    <li><a href="who-we-are.html" class="nav-link"><span>👥 Who We Are</span></a></li>
+    <div class="nav-divider"></div>
+    <li>
+      <div class="nav-link" onclick="toggleServices(this)"><span>⚙️ Services</span><span class="arrow">›</span></div>
+      <ul class="sub-menu" id="services-sub">
+        <li><a href="web-development.html">🌐 Website Design & Development</a></li>
+        <li><a href="advertisement.html">📢 Advertisement Creation</a></li>
+        <li><a href="business-systems.html">🖥️ Business System Creation</a></li>
+      </ul>
+    </li>
+    <div class="nav-divider"></div>
+    <li><a href="testimonials.html" class="nav-link"><span>⭐ Testimonials</span></a></li>
+    <li><a href="pricing.html" class="nav-link"><span>💰 Pricing</span></a></li>
+    <li><a href="contact.html" class="nav-link active"><span>📩 Contact Us</span></a></li>
+  </ul>
+  <div class="sidebar-foot"><p>One Vision. Limitless Reach.</p></div>
+</nav>
+<header id="topbar">
+  <button id="hamburger" onclick="toggleSidebar()"><span></span><span></span><span></span></button>
+  <a href="index.html" class="topbar-logo">Di<span class="r">SS</span>MaC <span class="g">GLOBAL</span></a>
+  <a href="contact.html" class="topbar-cta">Get a Quote</a>
+</header>
+
+<div class="main-content">
+  <section class="page-hero">
+    <div class="page-hero-inner">
+      <div class="page-label">Get in Touch</div>
+      <h1 class="page-title">CONTACT<br><span class="r">US</span></h1>
+      <p class="page-subtitle">Have a project in mind? We'd love to hear from you. Send us a message and we'll get back to you within 24 hours.</p>
+    </div>
+  </section>
+
+  <div class="contact-wrap">
+    <!-- Info Column -->
+    <div class="contact-info">
+      <p class="section-label">Reach Us</p>
+      <h2 class="section-title">Let's Start a<br>Conversation</h2>
+      <p class="section-desc">Whether you have a question, need a quote, or want to discuss a project — we're here and ready to help.</p>
+      <div class="info-cards">
+        <div class="info-card">
+          <div class="info-icon">📞</div>
+          <div><div class="info-label">Phone / WhatsApp</div><div class="info-value">[Your Phone Number]</div></div>
+        </div>
+        <div class="info-card">
+          <div class="info-icon">📧</div>
+          <div><div class="info-label">Email</div><div class="info-value">[your@email.com]</div></div>
+        </div>
+        <div class="info-card">
+          <div class="info-icon">📍</div>
+          <div><div class="info-label">Location</div><div class="info-value">Sri Lanka 🇱🇰</div></div>
+        </div>
+        <div class="info-card">
+          <div class="info-icon">🕒</div>
+          <div><div class="info-label">Response Time</div><div class="info-value">Within 24 hours</div></div>
+        </div>
+      </div>
+      <div class="social-row">
+        <a href="#" class="social-btn">📘 Facebook</a>
+        <a href="#" class="social-btn">📸 Instagram</a>
+        <a href="#" class="social-btn">💼 LinkedIn</a>
+        <a href="#" class="social-btn">💬 WhatsApp</a>
+      </div>
+    </div>
+
+    <!-- Form Column -->
+    <div class="contact-form-card">
+      <h3>Send Us a Message</h3>
+      <p>Fill in the details below and we'll respond as soon as possible.</p>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Your Name *</label>
+          <input type="text" id="c-name" placeholder="e.g. Kasun Perera"/>
+        </div>
+        <div class="form-group">
+          <label>Email Address *</label>
+          <input type="email" id="c-email" placeholder="you@example.com"/>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" id="c-phone" placeholder="+94 77 123 4567"/>
+        </div>
+        <div class="form-group">
+          <label>Service Interested In</label>
+          <select id="c-service">
+            <option value="">Select a service...</option>
+            <option>Web Design & Development</option>
+            <option>Advertisement Creation</option>
+            <option>Business System Creation</option>
+            <option>Multiple Services</option>
+            <option>General Enquiry</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Budget Range (LKR)</label>
+        <select id="c-budget">
+          <option value="">Select a range...</option>
+          <option>Under 25,000</option>
+          <option>25,000 – 50,000</option>
+          <option>50,000 – 100,000</option>
+          <option>100,000 – 200,000</option>
+          <option>200,000+</option>
+          <option>Not sure yet</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Your Message *</label>
+        <textarea id="c-message" rows="5" placeholder="Tell us about your project, requirements, timeline, or any questions you have..."></textarea>
+      </div>
+      <div class="submit-row">
+        <p class="form-note">🔒 We respect your privacy. Your info will never be shared with third parties.</p>
+        <button class="btn-primary" id="submit-btn" onclick="submitContact()">Send Message →</button>
+      </div>
+      <div id="form-success">✅ <strong>Message sent!</strong> Thank you for reaching out. We'll get back to you within 24 hours.</div>
+    </div>
+  </div>
+
+  <!-- Location -->
+  <section class="location-section">
+    <div class="location-inner">
+      <p class="section-label">Find Us</p>
+      <h2 class="section-title">Based in Sri Lanka</h2>
+      <p class="section-desc" style="margin:0 auto;max-width:400px">We operate across Sri Lanka and work with clients globally. Remote collaboration available worldwide.</p>
+      <div class="map-placeholder">
+        <div class="pin">📍</div>
+        <p>Sri Lanka 🇱🇰 — Serving Clients Across the Island & Beyond</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand"><div class="brand-name">Di<span class="r">SS</span>MaC <span class="g">Global</span></div><p>One Vision. Limitless Reach. Your trusted IT solutions partner in Sri Lanka.</p></div>
+    <div class="footer-col"><h4>Services</h4><ul><li><a href="web-development.html">Web Development</a></li><li><a href="advertisement.html">Advertisement</a></li><li><a href="business-systems.html">Business Systems</a></li></ul></div>
+    <div class="footer-col"><h4>Company</h4><ul><li><a href="who-we-are.html">Who We Are</a></li><li><a href="testimonials.html">Testimonials</a></li><li><a href="pricing.html">Pricing</a></li><li><a href="contact.html">Contact Us</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><p>© 2025 <span class="r">DiSSMaC Global</span>. All rights reserved.</p><p>ONE VISION. <span class="r">LIMITLESS REACH.</span></p></div>
+</footer>
+
+<script>
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('sidebar-overlay').classList.toggle('active');document.getElementById('hamburger').classList.toggle('open')}
+function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sidebar-overlay').classList.remove('active');document.getElementById('hamburger').classList.remove('open')}
+function toggleServices(el){document.getElementById('services-sub').classList.toggle('open');el.classList.toggle('active-parent')}
+window.addEventListener('scroll',()=>document.getElementById('topbar').classList.toggle('scrolled',window.scrollY>40));
+
+function submitContact(){
+  const name=document.getElementById('c-name').value.trim();
+  const email=document.getElementById('c-email').value.trim();
+  const msg=document.getElementById('c-message').value.trim();
+  if(!name||!email||!msg){alert('Please fill in Name, Email, and Message.');return;}
+  if(!/\S+@\S+\.\S+/.test(email)){alert('Please enter a valid email address.');return;}
+  const btn=document.getElementById('submit-btn');
+  btn.textContent='Sending...';btn.disabled=true;
+  setTimeout(()=>{
+    document.getElementById('form-success').style.display='block';
+    btn.style.display='none';
+    ['c-name','c-email','c-phone','c-message'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('c-service').selectedIndex=0;
+    document.getElementById('c-budget').selectedIndex=0;
+  },1200);
+}
+</script>
+</body>
+</html>

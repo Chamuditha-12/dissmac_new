@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Pricing — DiSSMaC Global</title>
+<link rel="stylesheet" href="shared.css"/>
+<style>
+.main-content{position:relative;z-index:1}
+.pricing-section{padding:5rem 2rem;max-width:1200px;margin:0 auto}
+.toggle-wrap{display:flex;align-items:center;gap:1rem;justify-content:center;margin-bottom:3.5rem}
+.toggle-label{font-size:.88rem;color:var(--grey);font-weight:500}
+.toggle-label.active{color:var(--white)}
+.toggle-switch{width:52px;height:28px;background:var(--dark3);border:1px solid rgba(255,255,255,.1);border-radius:14px;cursor:pointer;position:relative;transition:background .3s}
+.toggle-switch.on{background:var(--red)}
+.toggle-knob{position:absolute;top:3px;left:3px;width:20px;height:20px;background:#fff;border-radius:50%;transition:transform .3s}
+.toggle-switch.on .toggle-knob{transform:translateX(24px)}
+.save-badge{background:rgba(232,25,44,.15);border:1px solid rgba(232,25,44,.3);color:var(--red);font-size:.72rem;padding:.2rem .6rem;border-radius:10px;letter-spacing:.5px}
+
+.plans-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem}
+.plan-card{background:var(--dark2);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:2.2rem;position:relative;transition:transform .3s,border-color .3s,box-shadow .3s}
+.plan-card:hover{transform:translateY(-6px);box-shadow:0 16px 48px rgba(0,0,0,.4)}
+.plan-card.popular{border-color:rgba(232,25,44,.4);box-shadow:0 0 0 1px rgba(232,25,44,.15)}
+.popular-badge{position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:var(--red);color:#fff;font-size:.72rem;font-weight:700;letter-spacing:2px;padding:.35rem 1.2rem;border-radius:20px;white-space:nowrap}
+.plan-name{font-family:var(--font-head);font-size:1.6rem;letter-spacing:1px;color:var(--white);margin-bottom:.4rem}
+.plan-desc{font-size:.82rem;color:var(--grey);margin-bottom:1.5rem;font-weight:300;line-height:1.5}
+.plan-price{font-family:var(--font-head);font-size:3rem;color:var(--white);line-height:1}
+.plan-price .currency{font-size:1.2rem;vertical-align:top;margin-top:.4rem;display:inline-block;color:var(--grey)}
+.plan-price .period{font-family:var(--font-body);font-size:.8rem;color:var(--grey);font-weight:300}
+.plan-divider{height:1px;background:rgba(255,255,255,.07);margin:1.5rem 0}
+.plan-features{list-style:none;display:flex;flex-direction:column;gap:.7rem;margin-bottom:2rem}
+.plan-features li{font-size:.87rem;color:var(--light);display:flex;gap:.7rem;align-items:flex-start;line-height:1.4}
+.plan-features li span:first-child{flex-shrink:0;font-size:.9rem}
+.plan-features li.no{color:var(--grey)}
+.plan-features li.no span:first-child{opacity:.4}
+
+.service-tabs{display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center;margin-bottom:3rem}
+.tab-btn{background:var(--dark2);border:1px solid rgba(255,255,255,.1);color:var(--grey);padding:.55rem 1.4rem;border-radius:6px;font-size:.88rem;cursor:pointer;transition:all .2s;font-family:var(--font-body)}
+.tab-btn.active,.tab-btn:hover{background:rgba(232,25,44,.1);border-color:rgba(232,25,44,.4);color:var(--red)}
+
+.faq-section{background:var(--dark2);border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06);padding:5rem 2rem}
+.faq-inner{max-width:760px;margin:0 auto}
+.faq-list{margin-top:2.5rem;display:flex;flex-direction:column;gap:.8rem}
+.faq-item{border:1px solid rgba(255,255,255,.07);border-radius:8px;overflow:hidden;transition:border-color .3s}
+.faq-item.open{border-color:rgba(232,25,44,.25)}
+.faq-q{padding:1.2rem 1.5rem;display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-size:.95rem;color:var(--white);font-weight:500;user-select:none}
+.faq-q .faq-icon{font-size:.9rem;color:var(--red);transition:transform .3s;flex-shrink:0}
+.faq-item.open .faq-icon{transform:rotate(45deg)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease}
+.faq-item.open .faq-a{max-height:200px}
+.faq-a p{padding:0 1.5rem 1.2rem;font-size:.88rem;color:var(--grey);line-height:1.7;font-weight:300}
+
+.cta-strip{margin:5rem 2rem;max-width:1100px;margin-left:auto;margin-right:auto;background:linear-gradient(135deg,#1a0608,#1a1a1a);border:1px solid rgba(232,25,44,.25);border-radius:10px;padding:3rem 2rem;text-align:center}
+.cta-strip h2{font-family:var(--font-head);font-size:clamp(1.8rem,4vw,3rem);color:var(--white);margin-bottom:.8rem}
+.cta-strip p{color:var(--grey);margin-bottom:1.8rem;font-weight:300}
+.btn-row{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+</style>
+</head>
+<body>
+<div id="sidebar-overlay" onclick="closeSidebar()"></div>
+<nav id="sidebar">
+  <div class="sidebar-header"><div class="sidebar-logo">Di<span>SS</span>MaC</div><button id="close-btn" onclick="closeSidebar()">✕</button></div>
+  <ul class="nav-list">
+    <li><a href="index.html" class="nav-link"><span>🏠 Home</span></a></li>
+    <li><a href="who-we-are.html" class="nav-link"><span>👥 Who We Are</span></a></li>
+    <div class="nav-divider"></div>
+    <li>
+      <div class="nav-link" onclick="toggleServices(this)"><span>⚙️ Services</span><span class="arrow">›</span></div>
+      <ul class="sub-menu" id="services-sub">
+        <li><a href="web-development.html">🌐 Website Design & Development</a></li>
+        <li><a href="advertisement.html">📢 Advertisement Creation</a></li>
+        <li><a href="business-systems.html">🖥️ Business System Creation</a></li>
+      </ul>
+    </li>
+    <div class="nav-divider"></div>
+    <li><a href="testimonials.html" class="nav-link"><span>⭐ Testimonials</span></a></li>
+    <li><a href="pricing.html" class="nav-link active"><span>💰 Pricing</span></a></li>
+    <li><a href="contact.html" class="nav-link"><span>📩 Contact Us</span></a></li>
+  </ul>
+  <div class="sidebar-foot"><p>One Vision. Limitless Reach.</p></div>
+</nav>
+<header id="topbar">
+  <button id="hamburger" onclick="toggleSidebar()"><span></span><span></span><span></span></button>
+  <a href="index.html" class="topbar-logo">Di<span class="r">SS</span>MaC <span class="g">GLOBAL</span></a>
+  <a href="contact.html" class="topbar-cta">Get a Quote</a>
+</header>
+
+<div class="main-content">
+  <section class="page-hero">
+    <div class="page-hero-inner">
+      <div class="page-label">Transparent Pricing</div>
+      <h1 class="page-title">SIMPLE &<br><span class="r">FAIR PRICING</span></h1>
+      <p class="page-subtitle">No hidden fees. No surprises. Choose a plan that fits your business or contact us for a custom quote.</p>
+    </div>
+  </section>
+
+  <section class="pricing-section">
+    <!-- Service Tabs -->
+    <div class="service-tabs">
+      <button class="tab-btn active" onclick="switchTab('web',this)">🌐 Web Development</button>
+      <button class="tab-btn" onclick="switchTab('ads',this)">📢 Advertising</button>
+      <button class="tab-btn" onclick="switchTab('sys',this)">🖥️ Business Systems</button>
+    </div>
+
+    <!-- Monthly/Annual Toggle -->
+    <div class="toggle-wrap">
+      <span class="toggle-label active" id="lbl-monthly">One-Time</span>
+      <div class="toggle-switch" id="billing-toggle" onclick="toggleBilling()"><div class="toggle-knob"></div></div>
+      <span class="toggle-label" id="lbl-annual">Monthly Retainer</span>
+      <span class="save-badge">Save 20%</span>
+    </div>
+
+    <!-- WEB PLANS -->
+    <div id="tab-web" class="plans-grid">
+      <div class="plan-card">
+        <div class="plan-name">Starter</div>
+        <div class="plan-desc">Perfect for small businesses needing a simple professional presence online.</div>
+        <div class="plan-price"><span class="currency">LKR</span><span id="web-s-price">25,000</span></div>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li><span>✅</span><span>Up to 5 pages</span></li>
+          <li><span>✅</span><span>Mobile responsive design</span></li>
+          <li><span>✅</span><span>Contact form</span></li>
+          <li><span>✅</span><span>Basic SEO setup</span></li>
+          <li><span>✅</span><span>1 month free support</span></li>
+          <li class="no"><span>❌</span><span>E-commerce functionality</span></li>
+          <li class="no"><span>❌</span><span>Custom animations</span></li>
+        </ul>
+        <a href="contact.html" class="btn-outline" style="width:100%;text-align:center;display:block">Get Started</a>
+      </div>
+      <div class="plan-card popular">
+        <div class="popular-badge">⭐ MOST POPULAR</div>
+        <div class="plan-name">Business</div>
+        <div class="plan-desc">Full-featured website for growing businesses that want to stand out.</div>
+        <div class="plan-price"><span class="currency">LKR</span><span id="web-b-price">55,000</span></div>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li><span>✅</span><span>Up to 10 pages</span></li>
+          <li><span>✅</span><span>Custom design & animations</span></li>
+          <li><span>✅</span><span>Full SEO optimization</span></li>
+          <li><span>✅</span><span>Google Analytics setup</span></li>
+          <li><span>✅</span><span>Social media integration</span></li>
+          <li><span>✅</span><span>3 months free support</span></li>
+          <li class="no"><span>❌</span><span>E-commerce / online store</span></li>
+        </ul>
+        <a href="contact.html" class="btn-primary" style="width:100%;text-align:center;display:block">Get Started</a>
+      </div>
+      <div class="plan-card">
+        <div class="plan-name">E-Commerce</div>
+        <div class="plan-desc">Complete online store with everything you need to sell products online.</div>
+        <div class="plan-price"><span class="currency">LKR</span><span id="web-e-price">95,000</span></div>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li><span>✅</span><span>Unlimited pages</span></li>
+          <li><span>✅</span><span>Full online store setup</span></li>
+          <li><span>✅</span><span>Payment gateway integration</span></li>
+          <li><span>✅</span><span>Inventory management</span></li>
+          <li><span>✅</span><span>Order tracking system</span></li>
+          <li><span>✅</span><span>6 months free support</span></li>
+          <li><span>✅</span><span>Performance optimization</span></li>
+        </ul>
+        <a href="contact.html" class="btn-outline" style="width:100%;text-align:center;display:block">Get Started</a>
+      </div>
+    </div>
+
+    <!-- ADS PLANS -->
+    <div id="tab-ads" class="plans-grid" style="display:none">
+      <div class="plan-card">
+        <div class="plan-name">Launch</div>
+        <div class="plan-desc">Get your brand noticed with a focused ad campaign on key platforms.</div>
+        <div class="plan-price"><span class="currency">LKR</span><span>15,000</span><span class="period">/month</span></div>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li><span>✅</span><span>1 platform (FB or IG)</span></li>
+          <li><span>✅</span><span>3 ad creatives per month</span></li>
+          <li><span>✅</span><span>Basic audience targeting</span></li>
+          <li><span>✅</span><span>Monthly report</span></li>
+          <li class="no"><span>❌</span><span>Google Ads</span></li>
+          <li class="no"><span>❌</span><span>Video ads</span></li>
+        </ul>
+        <a href="contact.html" class="btn-outline" style="width:100%;text-align:center;display:block">Get Started</a>
+      </div>
+      <div class="plan-card popular">
+        <div class="popular-badge">⭐ MOST POPULAR</div>
+        <div class="plan-name">Growth</div>
+        <div class="plan-desc">Multi-platform campaigns managed and optimized for maximum ROI.</div>
+        <div class="plan-price"><span class="currency">LKR</span><span>30,000</span><span class="period">/month</span></div>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li><span>✅</span><span>3 platforms (FB, IG, Google)</span></li>
+          <li><span>✅</span><span>8 ad creatives per month</span></li>
+          <li><span>✅</span><span>Advanced audience targeting</span></li>
+          <li><span>✅</span><span>A/B testing</span></li>
+          <li><span>✅</span><span>Weekly performance report</span></li>
+          <li><span>✅</span><span>Campaign optimization</span></li>
+        </ul>
+        <a href="contact.html" class="btn-primary" style="width:100%;text-align:center;display:block">Get Started</a>
+      </div>
+      <div class="plan-card">
+        <div class="plan-name">Enterprise</div>
+        <div class="plan-desc">Full-scale advertising management across all major platforms.</div>
+        <div class="plan-price"><span class="currency">LKR</span><span>60,000</span><span class="period">/month</span></div>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li><span>✅</span><span>All platforms incl. TikTok & YouTube</span></li>
+          <li><span>✅</span><span>Unlimited ad creatives</span></li>
+          <li><span>✅</span><span>Video ad production</span></li>
+          <li><span>✅</span><span>Dedicated account manager</span></li>
+          <li><span>✅</span><span>Real-time dashboard access</span></li>
+          <li><span>✅</span><span>Priority support 24/7</span></li>
+        </ul>
+        <a href="contact.html" class="btn-outline" style="width:100%;text-align:center;display:block">Get Started</a>
+      </div>
+    </div>
+
+    <!-- SYSTEMS PLANS -->
+    <div id="tab-sys" class="plans-grid" style="display:none">
+      <div class="plan-card">
+        <div class="plan-name">Basic System</div>
+        <div class="plan-desc">Simple management system for small businesses and startups.</div>
+        <div class="plan-price"><span class="currency">LKR</span><span>80,000</span></div>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li><span>✅</span><span>Up to 3 core modules</span></li>
+          <li><span>✅</span><span>User authentication</span></li>
+          <li><span>✅</span><span>Basic reporting</span></li>
+          <li><span>✅</span><span>Web-based access</span></li>
+          <li><span>✅</span><span>2 months support</span></li>
+          <li class="no"><span>❌</span><span>Mobile app</span></li>
+        </ul>
+        <a href="contact.html" class="btn-outline" style="width:100%;text-align:center;display:block">Get Started</a>
+      </div>
+      <div class="plan-card popular">
+        <div class="popular-badge">⭐ MOST POPULAR</div>
+        <div class="plan-name">Pro System</div>
+        <div class="plan-desc">Comprehensive business system with advanced features and integrations.</div>
+        <div class="plan-price"><span class="currency">LKR</span><span>175,000</span></div>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li><span>✅</span><span>Up to 8 modules</span></li>
+          <li><span>✅</span><span>Role-based access control</span></li>
+          <li><span>✅</span><span>Advanced analytics dashboard</span></li>
+          <li><span>✅</span><span>API integrations</span></li>
+          <li><span>✅</span><span>Data export (Excel/PDF)</span></li>
+          <li><span>✅</span><span>6 months support</span></li>
+        </ul>
+        <a href="contact.html" class="btn-primary" style="width:100%;text-align:center;display:block">Get Started</a>
+      </div>
+      <div class="plan-card">
+        <div class="plan-name">Enterprise</div>
+        <div class="plan-desc">Fully custom enterprise-grade system built for complex operations.</div>
+        <div class="plan-price" style="font-size:1.8rem;padding:.5rem 0">Custom Quote</div>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li><span>✅</span><span>Unlimited modules</span></li>
+          <li><span>✅</span><span>Mobile app (iOS & Android)</span></li>
+          <li><span>✅</span><span>Cloud hosting & deployment</span></li>
+          <li><span>✅</span><span>Third-party integrations</span></li>
+          <li><span>✅</span><span>1 year support & maintenance</span></li>
+          <li><span>✅</span><span>Dedicated development team</span></li>
+        </ul>
+        <a href="contact.html" class="btn-outline" style="width:100%;text-align:center;display:block">Contact Us</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq-section">
+    <div class="faq-inner">
+      <p class="section-label">Common Questions</p>
+      <h2 class="section-title">Pricing FAQ</h2>
+      <div class="faq-list">
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)"><span>Do you offer payment in installments?</span><span class="faq-icon">+</span></div>
+          <div class="faq-a"><p>Yes! For projects over LKR 50,000, we offer flexible payment plans — typically 50% upfront and 50% on delivery. Contact us to discuss your preferred arrangement.</p></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)"><span>Can I get a custom quote for my project?</span><span class="faq-icon">+</span></div>
+          <div class="faq-a"><p>Absolutely! Every business is unique. Contact us through our Contact page with your project details and we'll prepare a custom quote within 24 hours.</p></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)"><span>What is included in the support period?</span><span class="faq-icon">+</span></div>
+          <div class="faq-a"><p>Support includes bug fixes, minor content updates, technical assistance, and guidance. Major feature additions after launch may be quoted separately.</p></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)"><span>Do prices include hosting and domain?</span><span class="faq-icon">+</span></div>
+          <div class="faq-a"><p>Our development prices do not include hosting and domain costs. However, we can recommend the best affordable options and assist with the full setup process.</p></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)"><span>How long does a project typically take?</span><span class="faq-icon">+</span></div>
+          <div class="faq-a"><p>Starter websites take 1–2 weeks, Business sites take 2–4 weeks, and E-commerce or System projects typically take 4–8 weeks depending on complexity.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="cta-strip">
+    <h2>Not Sure Which<br><span style="color:var(--red)">Plan is Right?</span></h2>
+    <p>Contact us and we'll recommend the best solution for your specific needs and budget.</p>
+    <div class="btn-row">
+      <a href="contact.html" class="btn-primary">Get a Free Consultation</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand"><div class="brand-name">Di<span class="r">SS</span>MaC <span class="g">Global</span></div><p>One Vision. Limitless Reach. Your trusted IT solutions partner in Sri Lanka.</p></div>
+    <div class="footer-col"><h4>Services</h4><ul><li><a href="web-development.html">Web Development</a></li><li><a href="advertisement.html">Advertisement</a></li><li><a href="business-systems.html">Business Systems</a></li></ul></div>
+    <div class="footer-col"><h4>Company</h4><ul><li><a href="who-we-are.html">Who We Are</a></li><li><a href="testimonials.html">Testimonials</a></li><li><a href="pricing.html">Pricing</a></li><li><a href="contact.html">Contact Us</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><p>© 2025 <span class="r">DiSSMaC Global</span>. All rights reserved.</p><p>ONE VISION. <span class="r">LIMITLESS REACH.</span></p></div>
+</footer>
+<script>
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('sidebar-overlay').classList.toggle('active');document.getElementById('hamburger').classList.toggle('open')}
+function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sidebar-overlay').classList.remove('active');document.getElementById('hamburger').classList.remove('open')}
+function toggleServices(el){document.getElementById('services-sub').classList.toggle('open');el.classList.toggle('active-parent')}
+window.addEventListener('scroll',()=>document.getElementById('topbar').classList.toggle('scrolled',window.scrollY>40));
+
+let billingMonthly=true;
+function toggleBilling(){
+  billingMonthly=!billingMonthly;
+  const sw=document.getElementById('billing-toggle');
+  sw.classList.toggle('on',!billingMonthly);
+  document.getElementById('lbl-monthly').classList.toggle('active',billingMonthly);
+  document.getElementById('lbl-annual').classList.toggle('active',!billingMonthly);
+  const disc=billingMonthly?1:0.8;
+  document.getElementById('web-s-price').textContent=(25000*disc).toLocaleString();
+  document.getElementById('web-b-price').textContent=(55000*disc).toLocaleString();
+  document.getElementById('web-e-price').textContent=(95000*disc).toLocaleString();
+}
+
+let activeTab='web';
+function switchTab(tab,btn){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-web').style.display='none';
+  document.getElementById('tab-ads').style.display='none';
+  document.getElementById('tab-sys').style.display='none';
+  document.getElementById('tab-'+tab).style.display='grid';
+  activeTab=tab;
+}
+
+function toggleFaq(el){
+  const item=el.parentElement;
+  item.classList.toggle('open');
+}
+</script>
+</body>
+</html>

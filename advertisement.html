@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Advertisement Creation — DiSSMaC Global</title>
+<link rel="stylesheet" href="shared.css"/>
+<style>
+.main-content{position:relative;z-index:1}
+.ad-section{padding:5rem 2rem;max-width:1200px;margin:0 auto}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;margin-top:3rem}
+.feature-card{background:var(--dark2);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:2rem;transition:transform .3s,border-color .3s,box-shadow .3s;position:relative;overflow:hidden}
+.feature-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--red),transparent);transform:scaleX(0);transform-origin:left;transition:transform .3s}
+.feature-card:hover{transform:translateY(-6px);border-color:rgba(232,25,44,.3);box-shadow:0 12px 40px rgba(0,0,0,.4)}
+.feature-card:hover::before{transform:scaleX(1)}
+.feature-icon{font-size:2rem;margin-bottom:1rem}
+.feature-title{font-family:var(--font-head);font-size:1.3rem;letter-spacing:1px;color:var(--white);margin-bottom:.6rem}
+.feature-text{font-size:.87rem;color:var(--grey);line-height:1.65;font-weight:300}
+.platforms-section{background:var(--dark2);border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06);padding:5rem 2rem;text-align:center}
+.platforms-inner{max-width:900px;margin:0 auto}
+.platform-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1.2rem;margin-top:2.5rem}
+.platform-card{background:var(--dark3);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:1.5rem 1rem;text-align:center;transition:border-color .3s,transform .3s}
+.platform-card:hover{border-color:rgba(232,25,44,.3);transform:translateY(-4px)}
+.platform-icon{font-size:2rem;margin-bottom:.7rem}
+.platform-name{font-size:.82rem;color:var(--light);font-weight:500}
+.results-section{padding:5rem 2rem;max-width:1100px;margin:0 auto}
+.results-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem;margin-top:3rem}
+.result-card{text-align:center;padding:2rem;border:1px solid rgba(255,255,255,.07);border-radius:8px;transition:border-color .3s}
+.result-card:hover{border-color:rgba(232,25,44,.3)}
+.result-num{font-family:var(--font-head);font-size:3rem;color:var(--red);line-height:1}
+.result-label{font-size:.8rem;color:var(--grey);letter-spacing:1px;text-transform:uppercase;margin-top:.4rem}
+.cta-strip{margin:0 2rem 5rem;max-width:1100px;margin-left:auto;margin-right:auto;background:linear-gradient(135deg,#1a0608,#1a1a1a);border:1px solid rgba(232,25,44,.25);border-radius:10px;padding:3rem 2rem;text-align:center}
+.cta-strip h2{font-family:var(--font-head);font-size:clamp(1.8rem,4vw,3rem);color:var(--white);margin-bottom:.8rem}
+.cta-strip p{color:var(--grey);margin-bottom:1.8rem;font-weight:300}
+.btn-row{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+</style>
+</head>
+<body>
+<div id="sidebar-overlay" onclick="closeSidebar()"></div>
+<nav id="sidebar">
+  <div class="sidebar-header"><div class="sidebar-logo">Di<span>SS</span>MaC</div><button id="close-btn" onclick="closeSidebar()">✕</button></div>
+  <ul class="nav-list">
+    <li><a href="index.html" class="nav-link"><span>🏠 Home</span></a></li>
+    <li><a href="who-we-are.html" class="nav-link"><span>👥 Who We Are</span></a></li>
+    <div class="nav-divider"></div>
+    <li>
+      <div class="nav-link active-parent" onclick="toggleServices(this)"><span>⚙️ Services</span><span class="arrow">›</span></div>
+      <ul class="sub-menu open" id="services-sub">
+        <li><a href="web-development.html">🌐 Website Design & Development</a></li>
+        <li><a href="advertisement.html" style="color:var(--red)">📢 Advertisement Creation</a></li>
+        <li><a href="business-systems.html">🖥️ Business System Creation</a></li>
+      </ul>
+    </li>
+    <div class="nav-divider"></div>
+    <li><a href="testimonials.html" class="nav-link"><span>⭐ Testimonials</span></a></li>
+    <li><a href="pricing.html" class="nav-link"><span>💰 Pricing</span></a></li>
+    <li><a href="contact.html" class="nav-link"><span>📩 Contact Us</span></a></li>
+  </ul>
+  <div class="sidebar-foot"><p>One Vision. Limitless Reach.</p></div>
+</nav>
+<header id="topbar">
+  <button id="hamburger" onclick="toggleSidebar()"><span></span><span></span><span></span></button>
+  <a href="index.html" class="topbar-logo">Di<span class="r">SS</span>MaC <span class="g">GLOBAL</span></a>
+  <a href="contact.html" class="topbar-cta">Get a Quote</a>
+</header>
+
+<div class="main-content">
+  <section class="page-hero">
+    <div class="page-hero-inner">
+      <div class="page-label">Our Services</div>
+      <h1 class="page-title">ADVERTISEMENT<br><span class="r">CREATION</span></h1>
+      <p class="page-subtitle">We craft powerful, result-driven digital advertising campaigns that put your brand in front of the right audience and turn clicks into customers.</p>
+    </div>
+  </section>
+
+  <section class="ad-section">
+    <p class="section-label">What We Offer</p>
+    <h2 class="section-title">Complete Advertising<br>Solutions</h2>
+    <div class="features-grid">
+      <div class="feature-card"><div class="feature-icon">📱</div><div class="feature-title">Social Media Ads</div><p class="feature-text">Eye-catching Facebook, Instagram, and TikTok ad campaigns designed to maximize reach, engagement, and conversions for your business.</p></div>
+      <div class="feature-card"><div class="feature-icon">🔍</div><div class="feature-title">Google Ads</div><p class="feature-text">Strategic Google Search and Display campaigns that put your business at the top of search results when customers are actively looking for you.</p></div>
+      <div class="feature-card"><div class="feature-icon">🎨</div><div class="feature-title">Creative Design</div><p class="feature-text">Professional ad graphics, banners, and video ads that stop the scroll and communicate your message with impact and clarity.</p></div>
+      <div class="feature-card"><div class="feature-icon">📊</div><div class="feature-title">Campaign Management</div><p class="feature-text">We don't just set and forget. We actively monitor, test, and optimize your campaigns to consistently improve performance and ROI.</p></div>
+      <div class="feature-card"><div class="feature-icon">🎯</div><div class="feature-title">Audience Targeting</div><p class="feature-text">Precision targeting by demographics, interests, behaviours, and location to ensure your ads reach exactly the right people.</p></div>
+      <div class="feature-card"><div class="feature-icon">📈</div><div class="feature-title">Analytics & Reporting</div><p class="feature-text">Clear, detailed reports showing exactly how your campaigns are performing — clicks, conversions, costs, and ROI explained simply.</p></div>
+    </div>
+  </section>
+
+  <section class="platforms-section">
+    <div class="platforms-inner">
+      <p class="section-label">Platforms</p>
+      <h2 class="section-title">Where We Run Your Ads</h2>
+      <div class="platform-grid">
+        <div class="platform-card"><div class="platform-icon">📘</div><div class="platform-name">Facebook</div></div>
+        <div class="platform-card"><div class="platform-icon">📸</div><div class="platform-name">Instagram</div></div>
+        <div class="platform-card"><div class="platform-icon">🔍</div><div class="platform-name">Google</div></div>
+        <div class="platform-card"><div class="platform-icon">▶️</div><div class="platform-name">YouTube</div></div>
+        <div class="platform-card"><div class="platform-icon">🎵</div><div class="platform-name">TikTok</div></div>
+        <div class="platform-card"><div class="platform-icon">💼</div><div class="platform-name">LinkedIn</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="results-section">
+    <p class="section-label" style="text-align:center">Our Impact</p>
+    <h2 class="section-title" style="text-align:center">Results We Deliver</h2>
+    <div class="results-grid">
+      <div class="result-card"><div class="result-num">3x</div><div class="result-label">Avg. ROI Increase</div></div>
+      <div class="result-card"><div class="result-num">↓40%</div><div class="result-label">Cost Per Click</div></div>
+      <div class="result-card"><div class="result-num">↑60%</div><div class="result-label">Engagement Rate</div></div>
+      <div class="result-card"><div class="result-num">24/7</div><div class="result-label">Campaign Monitoring</div></div>
+    </div>
+  </section>
+
+  <div class="cta-strip">
+    <h2>Ready to Grow Your<br><span style="color:var(--red)">Customer Base?</span></h2>
+    <p>Let us create a custom advertising strategy that delivers real results for your business.</p>
+    <div class="btn-row">
+      <a href="contact.html" class="btn-primary">Start Advertising Today</a>
+      <a href="pricing.html" class="btn-outline">View Pricing →</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand"><div class="brand-name">Di<span class="r">SS</span>MaC <span class="g">Global</span></div><p>One Vision. Limitless Reach. Your trusted IT solutions partner in Sri Lanka.</p></div>
+    <div class="footer-col"><h4>Services</h4><ul><li><a href="web-development.html">Web Development</a></li><li><a href="advertisement.html">Advertisement</a></li><li><a href="business-systems.html">Business Systems</a></li></ul></div>
+    <div class="footer-col"><h4>Company</h4><ul><li><a href="who-we-are.html">Who We Are</a></li><li><a href="testimonials.html">Testimonials</a></li><li><a href="pricing.html">Pricing</a></li><li><a href="contact.html">Contact Us</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><p>© 2025 <span class="r">DiSSMaC Global</span>. All rights reserved.</p><p>ONE VISION. <span class="r">LIMITLESS REACH.</span></p></div>
+</footer>
+<script>
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('sidebar-overlay').classList.toggle('active');document.getElementById('hamburger').classList.toggle('open')}
+function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sidebar-overlay').classList.remove('active');document.getElementById('hamburger').classList.remove('open')}
+function toggleServices(el){document.getElementById('services-sub').classList.toggle('open');el.classList.toggle('active-parent')}
+window.addEventListener('scroll',()=>document.getElementById('topbar').classList.toggle('scrolled',window.scrollY>40));
+</script>
+</body>
+</html>

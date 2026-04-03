@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Testimonials — DiSSMaC Global</title>
+<link rel="stylesheet" href="shared.css"/>
+<style>
+.main-content{position:relative;z-index:1}
+
+/* ── REVIEW FORM ── */
+.review-section{padding:5rem 2rem;max-width:860px;margin:0 auto}
+.form-card{background:var(--dark2);border:1px solid rgba(232,25,44,.2);border-radius:12px;padding:2.5rem;margin-top:2.5rem}
+.form-card h3{font-family:var(--font-head);font-size:1.8rem;letter-spacing:1px;color:var(--white);margin-bottom:1.8rem}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1.2rem}
+@media(max-width:560px){.form-row{grid-template-columns:1fr}}
+.form-group{display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.2rem}
+.form-group label{font-size:.8rem;color:var(--grey);letter-spacing:1px;text-transform:uppercase;font-weight:500}
+.form-group input,.form-group textarea{background:var(--dark3);border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:.85rem 1rem;color:var(--white);font-family:var(--font-body);font-size:.95rem;transition:border-color .2s,box-shadow .2s;resize:vertical}
+.form-group input:focus,.form-group textarea:focus{outline:none;border-color:var(--red);box-shadow:0 0 0 3px rgba(232,25,44,.1)}
+.form-group input::placeholder,.form-group textarea::placeholder{color:rgba(136,136,136,.6)}
+
+/* STAR RATING INPUT */
+.star-label{font-size:.8rem;color:var(--grey);letter-spacing:1px;text-transform:uppercase;font-weight:500;margin-bottom:.5rem;display:block}
+.star-input{display:flex;flex-direction:row-reverse;gap:.3rem;margin-bottom:1.2rem}
+.star-input input{display:none}
+.star-input label{font-size:2rem;color:rgba(255,255,255,.2);cursor:pointer;transition:color .15s,transform .15s;line-height:1}
+.star-input label:hover,.star-input label:hover~label,
+.star-input input:checked~label{color:#fbbf24;transform:scale(1.15)}
+
+/* PIN input */
+.pin-note{font-size:.75rem;color:var(--grey);margin-top:.3rem;line-height:1.5}
+
+/* ── REVIEWS LIST ── */
+.reviews-section{padding:0 2rem 5rem;max-width:1100px;margin:0 auto}
+.reviews-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:2rem}
+.sort-controls{display:flex;gap:.6rem;flex-wrap:wrap}
+.sort-btn{background:var(--dark2);border:1px solid rgba(255,255,255,.1);color:var(--grey);padding:.45rem 1rem;border-radius:20px;font-size:.8rem;cursor:pointer;transition:all .2s;font-family:var(--font-body)}
+.sort-btn.active,.sort-btn:hover{border-color:var(--red);color:var(--red);background:rgba(232,25,44,.08)}
+
+.reviews-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.5rem}
+.review-card{background:var(--dark2);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:1.8rem;position:relative;transition:transform .3s,border-color .3s,box-shadow .3s;animation:fadeUp .5s both}
+.review-card:hover{transform:translateY(-4px);border-color:rgba(232,25,44,.2);box-shadow:0 10px 32px rgba(0,0,0,.35)}
+.review-stars{display:flex;gap:3px;margin-bottom:.8rem}
+.review-stars span{font-size:1.1rem;line-height:1}
+.review-text{font-size:.9rem;color:var(--light);line-height:1.7;font-weight:300;margin-bottom:1.2rem;font-style:italic}
+.review-author{display:flex;align-items:center;gap:.8rem}
+.author-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--red-dim),#1a1a2e);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;font-weight:600;color:#fff;font-family:var(--font-head)}
+.author-info .name{font-size:.9rem;font-weight:600;color:var(--white)}
+.author-info .date{font-size:.75rem;color:var(--grey);margin-top:.1rem}
+.review-actions{position:absolute;top:1rem;right:1rem;display:flex;gap:.4rem}
+.action-btn{background:rgba(255,255,255,.06);border:none;color:var(--grey);padding:.3rem .6rem;border-radius:4px;font-size:.75rem;cursor:pointer;transition:all .2s;font-family:var(--font-body)}
+.action-btn:hover{background:rgba(232,25,44,.15);color:var(--red)}
+.action-btn.delete-btn:hover{background:rgba(232,25,44,.2)}
+
+/* SUMMARY BAR */
+.rating-summary{background:var(--dark2);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:2rem;margin-bottom:2.5rem;display:flex;gap:2.5rem;align-items:center;flex-wrap:wrap}
+.big-rating{text-align:center;flex-shrink:0}
+.big-num{font-family:var(--font-head);font-size:4rem;color:var(--white);line-height:1}
+.big-stars{display:flex;gap:3px;justify-content:center;margin:.3rem 0}
+.big-stars span{font-size:1.2rem}
+.total-count{font-size:.75rem;color:var(--grey);letter-spacing:1px}
+.rating-bars{flex:1;min-width:200px;display:flex;flex-direction:column;gap:.5rem}
+.bar-row{display:flex;align-items:center;gap:.8rem;font-size:.8rem;color:var(--grey)}
+.bar-row .bar-label{width:14px;text-align:right;flex-shrink:0}
+.bar-track{flex:1;height:6px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden}
+.bar-fill{height:100%;background:linear-gradient(90deg,var(--red),#ff6b6b);border-radius:3px;transition:width .8s ease}
+.bar-row .bar-count{width:20px;flex-shrink:0;text-align:right}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);z-index:2000;display:flex;align-items:center;justify-content:center;padding:1rem;opacity:0;pointer-events:none;transition:opacity .3s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{background:var(--dark2);border:1px solid rgba(232,25,44,.25);border-radius:12px;padding:2rem;width:100%;max-width:420px;animation:fadeUp .3s both}
+.modal h3{font-family:var(--font-head);font-size:1.5rem;color:var(--white);margin-bottom:.5rem}
+.modal p{font-size:.88rem;color:var(--grey);margin-bottom:1.5rem;line-height:1.5}
+.modal-actions{display:flex;gap:.8rem;flex-wrap:wrap}
+.modal input{width:100%;background:var(--dark3);border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:.8rem 1rem;color:var(--white);font-family:var(--font-body);font-size:.95rem;margin-bottom:1rem;transition:border-color .2s}
+.modal input:focus{outline:none;border-color:var(--red)}
+.modal-err{font-size:.82rem;color:var(--red);margin-bottom:.8rem;display:none}
+
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:4rem 2rem;color:var(--grey)}
+.empty-state .icon{font-size:3rem;margin-bottom:1rem;opacity:.4}
+.empty-state p{font-size:.95rem}
+
+/* TOAST */
+.toast{position:fixed;bottom:2rem;right:2rem;background:var(--dark3);border:1px solid rgba(232,25,44,.4);color:var(--white);padding:1rem 1.5rem;border-radius:8px;font-size:.88rem;z-index:3000;animation:fadeUp .3s both;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.toast.hidden{display:none}
+</style>
+</head>
+<body>
+<div id="sidebar-overlay" onclick="closeSidebar()"></div>
+<nav id="sidebar">
+  <div class="sidebar-header"><div class="sidebar-logo">Di<span>SS</span>MaC</div><button id="close-btn" onclick="closeSidebar()">✕</button></div>
+  <ul class="nav-list">
+    <li><a href="index.html" class="nav-link"><span>🏠 Home</span></a></li>
+    <li><a href="who-we-are.html" class="nav-link"><span>👥 Who We Are</span></a></li>
+    <div class="nav-divider"></div>
+    <li>
+      <div class="nav-link" onclick="toggleServices(this)"><span>⚙️ Services</span><span class="arrow">›</span></div>
+      <ul class="sub-menu" id="services-sub">
+        <li><a href="web-development.html">🌐 Website Design & Development</a></li>
+        <li><a href="advertisement.html">📢 Advertisement Creation</a></li>
+        <li><a href="business-systems.html">🖥️ Business System Creation</a></li>
+      </ul>
+    </li>
+    <div class="nav-divider"></div>
+    <li><a href="testimonials.html" class="nav-link active"><span>⭐ Testimonials</span></a></li>
+    <li><a href="pricing.html" class="nav-link"><span>💰 Pricing</span></a></li>
+    <li><a href="contact.html" class="nav-link"><span>📩 Contact Us</span></a></li>
+  </ul>
+  <div class="sidebar-foot"><p>One Vision. Limitless Reach.</p></div>
+</nav>
+<header id="topbar">
+  <button id="hamburger" onclick="toggleSidebar()"><span></span><span></span><span></span></button>
+  <a href="index.html" class="topbar-logo">Di<span class="r">SS</span>MaC <span class="g">GLOBAL</span></a>
+  <a href="contact.html" class="topbar-cta">Get a Quote</a>
+</header>
+
+<div class="main-content">
+  <section class="page-hero">
+    <div class="page-hero-inner">
+      <div class="page-label">Client Reviews</div>
+      <h1 class="page-title">WHAT CLIENTS<br><span class="r">SAY ABOUT US</span></h1>
+      <p class="page-subtitle">Real feedback from real clients. See what businesses and individuals say about working with DiSSMaC Global.</p>
+    </div>
+  </section>
+
+  <!-- SUBMIT REVIEW FORM -->
+  <section class="review-section">
+    <p class="section-label">Share Your Experience</p>
+    <h2 class="section-title">Leave a Review</h2>
+    <div class="form-card">
+      <h3>✍️ Write Your Review</h3>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Your Name *</label>
+          <input type="text" id="inp-name" placeholder="e.g. Kasun Perera" maxlength="60"/>
+        </div>
+        <div class="form-group">
+          <label>Service Used</label>
+          <input type="text" id="inp-service" placeholder="e.g. Web Development" maxlength="60"/>
+        </div>
+      </div>
+      <span class="star-label">Your Rating *</span>
+      <div class="star-input" id="star-input">
+        <input type="radio" name="rating" id="s5" value="5"/><label for="s5">★</label>
+        <input type="radio" name="rating" id="s4" value="4"/><label for="s4">★</label>
+        <input type="radio" name="rating" id="s3" value="3"/><label for="s3">★</label>
+        <input type="radio" name="rating" id="s2" value="2"/><label for="s2">★</label>
+        <input type="radio" name="rating" id="s1" value="1"/><label for="s1">★</label>
+      </div>
+      <div class="form-group">
+        <label>Your Review *</label>
+        <textarea id="inp-review" rows="4" placeholder="Tell others about your experience with DiSSMaC Global..." maxlength="600"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Create a PIN (4–6 digits) *</label>
+        <input type="password" id="inp-pin" placeholder="e.g. 1234  —  save this to edit/delete later" maxlength="6"/>
+        <span class="pin-note">🔒 Your PIN lets you edit or delete your review later. Please save it — we cannot recover it for you.</span>
+      </div>
+      <button class="btn-primary" onclick="submitReview()" style="width:100%;justify-content:center">Submit Review →</button>
+    </div>
+  </section>
+
+  <!-- REVIEWS LIST -->
+  <section class="reviews-section">
+    <!-- Summary -->
+    <div class="rating-summary" id="rating-summary"></div>
+
+    <div class="reviews-header">
+      <div>
+        <p class="section-label">All Reviews</p>
+        <h2 class="section-title" id="review-count-title">Client Reviews</h2>
+      </div>
+      <div class="sort-controls">
+        <button class="sort-btn active" onclick="setSort('newest',this)">Newest</button>
+        <button class="sort-btn" onclick="setSort('highest',this)">Highest Rated</button>
+        <button class="sort-btn" onclick="setSort('lowest',this)">Lowest Rated</button>
+      </div>
+    </div>
+    <div class="reviews-grid" id="reviews-grid"></div>
+  </section>
+</div>
+
+<!-- VERIFY PIN MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <h3 id="modal-title">Enter Your PIN</h3>
+    <p id="modal-desc">Enter the PIN you used when posting this review.</p>
+    <input type="password" id="modal-pin" placeholder="Your PIN" maxlength="6"/>
+    <div class="modal-err" id="modal-err">❌ Incorrect PIN. Please try again.</div>
+    <div class="modal-actions">
+      <button class="btn-primary" id="modal-confirm-btn">Confirm</button>
+      <button class="btn-outline" onclick="closeModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal-overlay" id="edit-modal">
+  <div class="modal" style="max-width:520px">
+    <h3>✏️ Edit Your Review</h3>
+    <p>Update your review below.</p>
+    <span class="star-label">Rating</span>
+    <div class="star-input" id="edit-star-input">
+      <input type="radio" name="edit-rating" id="es5" value="5"/><label for="es5">★</label>
+      <input type="radio" name="edit-rating" id="es4" value="4"/><label for="es4">★</label>
+      <input type="radio" name="edit-rating" id="es3" value="3"/><label for="es3">★</label>
+      <input type="radio" name="edit-rating" id="es2" value="2"/><label for="es2">★</label>
+      <input type="radio" name="edit-rating" id="es1" value="1"/><label for="es1">★</label>
+    </div>
+    <div class="form-group" style="margin-top:.8rem">
+      <label>Review</label>
+      <textarea id="edit-text" rows="4" style="background:var(--dark3);border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:.8rem 1rem;color:var(--white);font-family:var(--font-body);font-size:.9rem;resize:vertical" maxlength="600"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-primary" onclick="saveEdit()">Save Changes</button>
+      <button class="btn-outline" onclick="closeEditModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast hidden" id="toast"></div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand"><div class="brand-name">Di<span class="r">SS</span>MaC <span class="g">Global</span></div><p>One Vision. Limitless Reach. Your trusted IT solutions partner in Sri Lanka.</p></div>
+    <div class="footer-col"><h4>Services</h4><ul><li><a href="web-development.html">Web Development</a></li><li><a href="advertisement.html">Advertisement</a></li><li><a href="business-systems.html">Business Systems</a></li></ul></div>
+    <div class="footer-col"><h4>Company</h4><ul><li><a href="who-we-are.html">Who We Are</a></li><li><a href="testimonials.html">Testimonials</a></li><li><a href="pricing.html">Pricing</a></li><li><a href="contact.html">Contact Us</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><p>© 2025 <span class="r">DiSSMaC Global</span>. All rights reserved.</p><p>ONE VISION. <span class="r">LIMITLESS REACH.</span></p></div>
+</footer>
+
+<script>
+/* ══ SIDEBAR ══ */
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('sidebar-overlay').classList.toggle('active');document.getElementById('hamburger').classList.toggle('open')}
+function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sidebar-overlay').classList.remove('active');document.getElementById('hamburger').classList.remove('open')}
+function toggleServices(el){document.getElementById('services-sub').classList.toggle('open');el.classList.toggle('active-parent')}
+window.addEventListener('scroll',()=>document.getElementById('topbar').classList.toggle('scrolled',window.scrollY>40));
+
+/* ══ STORAGE KEY ══ */
+const STORE_KEY = 'dissmac_reviews_v1';
+
+function loadReviews(){ try{ return JSON.parse(localStorage.getItem(STORE_KEY))||[]; }catch(e){ return []; } }
+function saveReviews(r){ localStorage.setItem(STORE_KEY, JSON.stringify(r)); }
+
+/* ══ HASH PIN (simple obfuscation) ══ */
+function hashPin(p){ let h=0;for(let i=0;i<p.length;i++){h=(h<<5)-h+p.charCodeAt(i);h|=0;}return String(h); }
+
+/* ══ SORT STATE ══ */
+let sortMode='newest';
+function setSort(mode,btn){
+  sortMode=mode;
+  document.querySelectorAll('.sort-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderReviews();
+}
+
+/* ══ STARS HTML ══ */
+function starsHTML(n){
+  let h='';
+  for(let i=1;i<=5;i++) h+=`<span style="color:${i<=n?'#fbbf24':'rgba(255,255,255,.2)'}">${i<=n?'★':'★'}</span>`;
+  return h;
+}
+
+/* ══ SUBMIT REVIEW ══ */
+function submitReview(){
+  const name=document.getElementById('inp-name').value.trim();
+  const service=document.getElementById('inp-service').value.trim();
+  const text=document.getElementById('inp-review').value.trim();
+  const pin=document.getElementById('inp-pin').value.trim();
+  const ratingEl=document.querySelector('input[name="rating"]:checked');
+
+  if(!name){showToast('⚠️ Please enter your name.');return;}
+  if(!ratingEl){showToast('⚠️ Please select a star rating.');return;}
+  if(!text){showToast('⚠️ Please write your review.');return;}
+  if(!pin||pin.length<4){showToast('⚠️ PIN must be at least 4 digits.');return;}
+  if(!/^\d+$/.test(pin)){showToast('⚠️ PIN must be numbers only.');return;}
+
+  const reviews=loadReviews();
+  const review={
+    id: Date.now().toString(),
+    name,service,
+    rating: parseInt(ratingEl.value),
+    text,
+    pin: hashPin(pin),
+    date: new Date().toISOString()
+  };
+  reviews.unshift(review);
+  saveReviews(reviews);
+
+  // reset form
+  document.getElementById('inp-name').value='';
+  document.getElementById('inp-service').value='';
+  document.getElementById('inp-review').value='';
+  document.getElementById('inp-pin').value='';
+  document.querySelectorAll('input[name="rating"]').forEach(r=>r.checked=false);
+
+  showToast('✅ Review submitted! Thank you.');
+  renderReviews();
+  renderSummary();
+  document.getElementById('reviews-grid').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+/* ══ RENDER REVIEWS ══ */
+function renderReviews(){
+  const reviews=[...loadReviews()];
+  const grid=document.getElementById('reviews-grid');
+  document.getElementById('review-count-title').textContent=`${reviews.length} Review${reviews.length!==1?'s':''}`;
+
+  if(reviews.length===0){
+    grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><div class="icon">💬</div><p>No reviews yet. Be the first to share your experience!</p></div>`;
+    return;
+  }
+
+  if(sortMode==='highest') reviews.sort((a,b)=>b.rating-a.rating);
+  else if(sortMode==='lowest') reviews.sort((a,b)=>a.rating-b.rating);
+  else reviews.sort((a,b)=>b.id-a.id);
+
+  grid.innerHTML=reviews.map((r,delay)=>{
+    const d=new Date(r.date);
+    const dateStr=d.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+    const initials=r.name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+    const svcBadge=r.service?`<span style="display:inline-block;background:rgba(232,25,44,.1);border:1px solid rgba(232,25,44,.2);color:var(--light);padding:.2rem .6rem;border-radius:10px;font-size:.72rem;margin-bottom:.8rem">${r.service}</span>`:'';
+    return `
+    <div class="review-card" style="animation-delay:${delay*0.07}s">
+      <div class="review-actions">
+        <button class="action-btn" onclick="openEditFlow('${r.id}')">✏️ Edit</button>
+        <button class="action-btn delete-btn" onclick="openDeleteFlow('${r.id}')">🗑️ Delete</button>
+      </div>
+      <div class="review-stars">${starsHTML(r.rating)}</div>
+      ${svcBadge}
+      <p class="review-text">"${escapeHtml(r.text)}"</p>
+      <div class="review-author">
+        <div class="author-avatar">${initials}</div>
+        <div class="author-info">
+          <div class="name">${escapeHtml(r.name)}</div>
+          <div class="date">${dateStr}</div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ══ SUMMARY BAR ══ */
+function renderSummary(){
+  const reviews=loadReviews();
+  const summary=document.getElementById('rating-summary');
+  if(reviews.length===0){summary.style.display='none';return;}
+  summary.style.display='flex';
+
+  const avg=reviews.reduce((s,r)=>s+r.rating,0)/reviews.length;
+  const counts={5:0,4:0,3:0,2:0,1:0};
+  reviews.forEach(r=>counts[r.rating]++);
+
+  summary.innerHTML=`
+    <div class="big-rating">
+      <div class="big-num">${avg.toFixed(1)}</div>
+      <div class="big-stars">${starsHTML(Math.round(avg))}</div>
+      <div class="total-count">${reviews.length} review${reviews.length!==1?'s':''}</div>
+    </div>
+    <div class="rating-bars">
+      ${[5,4,3,2,1].map(n=>`
+        <div class="bar-row">
+          <span class="bar-label">${n}</span>
+          <span style="color:#fbbf24;font-size:.9rem">★</span>
+          <div class="bar-track"><div class="bar-fill" style="width:${reviews.length?Math.round(counts[n]/reviews.length*100):0}%"></div></div>
+          <span class="bar-count">${counts[n]}</span>
+        </div>`).join('')}
+    </div>`;
+}
+
+/* ══ ESCAPE HTML ══ */
+function escapeHtml(t){ const d=document.createElement('div');d.textContent=t;return d.innerHTML; }
+
+/* ══ MODAL STATE ══ */
+let pendingAction=null, pendingId=null;
+
+function openModal(title,desc,action,id){
+  pendingAction=action; pendingId=id;
+  document.getElementById('modal-title').textContent=title;
+  document.getElementById('modal-desc').textContent=desc;
+  document.getElementById('modal-pin').value='';
+  document.getElementById('modal-err').style.display='none';
+  document.getElementById('modal').classList.add('open');
+  setTimeout(()=>document.getElementById('modal-pin').focus(),100);
+}
+function closeModal(){document.getElementById('modal').classList.remove('open');pendingAction=null;pendingId=null;}
+
+document.getElementById('modal-confirm-btn').onclick=function(){
+  const pin=document.getElementById('modal-pin').value.trim();
+  if(!pin){document.getElementById('modal-err').textContent='Please enter your PIN.';document.getElementById('modal-err').style.display='block';return;}
+  const reviews=loadReviews();
+  const review=reviews.find(r=>r.id===pendingId);
+  if(!review){closeModal();return;}
+  if(review.pin!==hashPin(pin)){document.getElementById('modal-err').style.display='block';return;}
+  closeModal();
+  if(pendingAction==='delete') doDelete(pendingId);
+  else if(pendingAction==='edit') openEditModal(pendingId);
+};
+
+/* ══ DELETE ══ */
+function openDeleteFlow(id){openModal('🗑️ Delete Review','Enter your PIN to confirm deletion.','delete',id);}
+function doDelete(id){
+  const reviews=loadReviews().filter(r=>r.id!==id);
+  saveReviews(reviews);
+  renderReviews();renderSummary();
+  showToast('🗑️ Review deleted.');
+}
+
+/* ══ EDIT ══ */
+function openEditFlow(id){openModal('✏️ Edit Review','Enter your PIN to edit this review.','edit',id);}
+let editingId=null;
+function openEditModal(id){
+  editingId=id;
+  const review=loadReviews().find(r=>r.id===id);
+  if(!review)return;
+  document.getElementById('edit-text').value=review.text;
+  document.querySelectorAll('input[name="edit-rating"]').forEach(r=>{ r.checked=(parseInt(r.value)===review.rating); });
+  document.getElementById('edit-modal').classList.add('open');
+}
+function closeEditModal(){document.getElementById('edit-modal').classList.remove('open');editingId=null;}
+function saveEdit(){
+  const text=document.getElementById('edit-text').value.trim();
+  const rEl=document.querySelector('input[name="edit-rating"]:checked');
+  if(!text){showToast('⚠️ Review text cannot be empty.');return;}
+  if(!rEl){showToast('⚠️ Please select a rating.');return;}
+  const reviews=loadReviews();
+  const idx=reviews.findIndex(r=>r.id===editingId);
+  if(idx<0){closeEditModal();return;}
+  reviews[idx].text=text;
+  reviews[idx].rating=parseInt(rEl.value);
+  reviews[idx].edited=true;
+  saveReviews(reviews);
+  closeEditModal();
+  renderReviews();renderSummary();
+  showToast('✅ Review updated!');
+}
+
+/* ══ TOAST ══ */
+let toastTimer=null;
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.remove('hidden');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.add('hidden'),3500);
+}
+
+/* ══ INIT ══ */
+renderReviews();
+renderSummary();
+</script>
+</body>
+</html>

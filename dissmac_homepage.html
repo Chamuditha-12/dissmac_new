@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DiSSMaC Global — One Vision. Limitless Reach.</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    /* ── VARIABLES ── */
+    :root {
+      --red:       #e8192c;
+      --red-dim:   #a01020;
+      --dark:      #0a0a0a;
+      --dark2:     #111111;
+      --dark3:     #1a1a1a;
+      --grey:      #888888;
+      --light:     #d0d0d0;
+      --white:     #f5f5f5;
+      --sidebar-w: 300px;
+      --font-head: 'Bebas Neue', sans-serif;
+      --font-body: 'Outfit', sans-serif;
+    }
+
+    /* ── RESET ── */
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--dark);
+      color: var(--light);
+      font-family: var(--font-body);
+      overflow-x: hidden;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    /* ── NOISE OVERLAY ── */
+    body::before {
+      content:'';
+      position:fixed; inset:0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events:none; z-index:0;
+    }
+
+    /* ════════════════════════════
+       SIDEBAR / HAMBURGER MENU
+    ════════════════════════════ */
+    #sidebar-overlay {
+      position:fixed; inset:0;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(4px);
+      opacity:0; pointer-events:none;
+      transition: opacity .35s ease;
+      z-index: 900;
+    }
+    #sidebar-overlay.active { opacity:1; pointer-events:all; }
+
+    #sidebar {
+      position: fixed;
+      top:0; left:0;
+      width: var(--sidebar-w);
+      height: 100vh;
+      background: var(--dark2);
+      border-right: 1px solid rgba(232,25,44,.25);
+      z-index: 1000;
+      transform: translateX(-100%);
+      transition: transform .4s cubic-bezier(.77,0,.18,1);
+      display:flex; flex-direction:column;
+      padding: 0 0 2rem 0;
+      overflow-y: auto;
+    }
+    #sidebar.open { transform: translateX(0); }
+
+    .sidebar-header {
+      padding: 1.4rem 1.5rem;
+      border-bottom: 1px solid rgba(255,255,255,.07);
+      display:flex; align-items:center; justify-content:space-between;
+    }
+    .sidebar-logo {
+      font-family: var(--font-head);
+      font-size: 1.6rem;
+      letter-spacing: 2px;
+      color: var(--white);
+    }
+    .sidebar-logo span { color: var(--red); }
+
+    #close-btn {
+      background:none; border:none; cursor:pointer;
+      color: var(--grey); font-size:1.5rem;
+      transition: color .2s;
+    }
+    #close-btn:hover { color: var(--red); }
+
+    .nav-list {
+      list-style:none;
+      padding: 1rem 0;
+      flex:1;
+    }
+    .nav-list li { position:relative; }
+
+    .nav-link {
+      display:flex; align-items:center; justify-content:space-between;
+      padding: .85rem 1.5rem;
+      font-size: .95rem;
+      font-weight: 500;
+      letter-spacing: .5px;
+      color: var(--light);
+      transition: background .2s, color .2s, padding-left .2s;
+      cursor:pointer;
+    }
+    .nav-link:hover {
+      background: rgba(232,25,44,.08);
+      color: var(--red);
+      padding-left: 2rem;
+    }
+    .nav-link .arrow {
+      font-size: .7rem;
+      transition: transform .3s;
+      color: var(--grey);
+    }
+    .nav-link.active-parent .arrow { transform: rotate(90deg); color: var(--red); }
+
+    /* sub-menu */
+    .sub-menu {
+      list-style:none;
+      max-height:0; overflow:hidden;
+      transition: max-height .35s ease;
+      background: rgba(0,0,0,.3);
+    }
+    .sub-menu.open { max-height: 200px; }
+    .sub-menu li a {
+      display:block;
+      padding: .65rem 1.5rem .65rem 2.5rem;
+      font-size:.875rem;
+      color: var(--grey);
+      transition: color .2s, padding-left .2s;
+      position:relative;
+    }
+    .sub-menu li a::before {
+      content:'›';
+      position:absolute; left:1.5rem;
+      color: var(--red-dim);
+    }
+    .sub-menu li a:hover { color: var(--red); padding-left: 3rem; }
+
+    .nav-divider {
+      height:1px;
+      background: rgba(255,255,255,.06);
+      margin: .5rem 1.5rem;
+    }
+
+    /* ════════════════════════════
+       TOP NAVBAR
+    ════════════════════════════ */
+    #topbar {
+      position: fixed; top:0; left:0; right:0;
+      height: 70px;
+      background: rgba(10,10,10,.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      display:flex; align-items:center; justify-content:space-between;
+      padding: 0 2rem;
+      z-index: 800;
+    }
+
+    #hamburger {
+      background:none; border:none; cursor:pointer;
+      display:flex; flex-direction:column; gap:5px;
+      padding: 4px;
+    }
+    #hamburger span {
+      display:block; width:26px; height:2px;
+      background: var(--light);
+      border-radius:2px;
+      transition: transform .3s, opacity .3s, background .3s;
+    }
+    #hamburger:hover span { background: var(--red); }
+    #hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    #hamburger.open span:nth-child(2) { opacity:0; }
+    #hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .topbar-logo {
+      position:absolute; left:50%; transform:translateX(-50%);
+      font-family: var(--font-head);
+      font-size: 1.8rem;
+      letter-spacing: 3px;
+      color: var(--white);
+    }
+    .topbar-logo span { color: var(--red); }
+
+    .topbar-cta {
+      background: var(--red);
+      color: #fff;
+      padding: .5rem 1.2rem;
+      border-radius: 4px;
+      font-size:.85rem;
+      font-weight:600;
+      letter-spacing:.5px;
+      transition: background .2s, transform .2s;
+    }
+    .topbar-cta:hover { background: #c0101f; transform:scale(1.04); }
+
+    /* ════════════════════════════
+       HERO SECTION
+    ════════════════════════════ */
+    #hero {
+      min-height: 100vh;
+      display:flex; align-items:center; justify-content:center;
+      position:relative;
+      padding: 100px 2rem 4rem;
+      overflow:hidden;
+    }
+
+    /* animated grid background */
+    #hero::before {
+      content:'';
+      position:absolute; inset:0;
+      background-image:
+        linear-gradient(rgba(232,25,44,.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(232,25,44,.06) 1px, transparent 1px);
+      background-size: 60px 60px;
+      animation: gridMove 20s linear infinite;
+    }
+    @keyframes gridMove {
+      0%   { background-position: 0 0; }
+      100% { background-position: 60px 60px; }
+    }
+
+    /* radial glow */
+    #hero::after {
+      content:'';
+      position:absolute; inset:0;
+      background: radial-gradient(ellipse 70% 60% at 50% 50%,
+        rgba(232,25,44,.12) 0%, transparent 70%);
+      pointer-events:none;
+    }
+
+    .hero-inner {
+      position:relative; z-index:2;
+      text-align:center;
+      max-width: 900px;
+    }
+
+    .hero-badge {
+      display:inline-block;
+      background: rgba(232,25,44,.15);
+      border: 1px solid rgba(232,25,44,.4);
+      color: var(--red);
+      font-size:.78rem;
+      font-weight:600;
+      letter-spacing:2px;
+      text-transform:uppercase;
+      padding:.4rem 1rem;
+      border-radius:20px;
+      margin-bottom:1.5rem;
+      animation: fadeUp .8s .1s both;
+    }
+
+    .hero-title {
+      font-family: var(--font-head);
+      font-size: clamp(3.5rem, 9vw, 8rem);
+      line-height: .95;
+      letter-spacing: 2px;
+      color: var(--white);
+      animation: fadeUp .8s .2s both;
+    }
+    .hero-title .red { color: var(--red); }
+
+    .hero-sub {
+      margin-top: 1.2rem;
+      font-size: clamp(.95rem, 2vw, 1.2rem);
+      color: var(--grey);
+      font-weight:300;
+      letter-spacing:4px;
+      text-transform:uppercase;
+      animation: fadeUp .8s .35s both;
+    }
+
+    .hero-desc {
+      margin-top: 1.8rem;
+      font-size: 1.05rem;
+      color: var(--light);
+      max-width:600px;
+      margin-left:auto; margin-right:auto;
+      line-height:1.7;
+      font-weight:300;
+      animation: fadeUp .8s .5s both;
+    }
+
+    .hero-btns {
+      margin-top: 2.5rem;
+      display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;
+      animation: fadeUp .8s .65s both;
+    }
+    .btn-primary {
+      background: var(--red);
+      color:#fff;
+      padding:.85rem 2.2rem;
+      border-radius:4px;
+      font-weight:600;
+      font-size:.95rem;
+      letter-spacing:.5px;
+      transition: background .2s, transform .2s, box-shadow .2s;
+      box-shadow: 0 4px 24px rgba(232,25,44,.35);
+    }
+    .btn-primary:hover {
+      background:#c0101f;
+      transform:translateY(-3px);
+      box-shadow: 0 8px 32px rgba(232,25,44,.5);
+    }
+    .btn-outline {
+      border: 1px solid rgba(255,255,255,.2);
+      color: var(--light);
+      padding:.85rem 2.2rem;
+      border-radius:4px;
+      font-weight:500;
+      font-size:.95rem;
+      transition: border-color .2s, color .2s, transform .2s;
+    }
+    .btn-outline:hover {
+      border-color: var(--red);
+      color: var(--red);
+      transform:translateY(-3px);
+    }
+
+    .hero-scroll {
+      position:absolute; bottom:2rem; left:50%; transform:translateX(-50%);
+      display:flex; flex-direction:column; align-items:center; gap:.4rem;
+      color: var(--grey); font-size:.75rem; letter-spacing:2px;
+      text-transform:uppercase;
+      animation: fadeUp 1s 1s both;
+    }
+    .scroll-line {
+      width:1px; height:40px;
+      background: linear-gradient(var(--red), transparent);
+      animation: scrollPulse 2s infinite;
+    }
+    @keyframes scrollPulse {
+      0%,100% { opacity:.4; } 50% { opacity:1; }
+    }
+
+    /* ════════════════════════════
+       STATS BAR
+    ════════════════════════════ */
+    #stats {
+      background: var(--dark2);
+      border-top: 1px solid rgba(255,255,255,.06);
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      padding: 2rem;
+      display:flex; justify-content:center; flex-wrap:wrap; gap:0;
+    }
+    .stat-item {
+      text-align:center;
+      padding: 1rem 3rem;
+      border-right: 1px solid rgba(255,255,255,.08);
+    }
+    .stat-item:last-child { border-right:none; }
+    .stat-num {
+      font-family: var(--font-head);
+      font-size:2.8rem;
+      color: var(--red);
+      letter-spacing:1px;
+      line-height:1;
+    }
+    .stat-label {
+      font-size:.78rem;
+      color: var(--grey);
+      letter-spacing:2px;
+      text-transform:uppercase;
+      margin-top:.3rem;
+    }
+
+    /* ════════════════════════════
+       SERVICES SECTION
+    ════════════════════════════ */
+    #services {
+      padding: 6rem 2rem;
+      max-width:1200px;
+      margin:0 auto;
+    }
+
+    .section-label {
+      font-size:.75rem;
+      letter-spacing:4px;
+      text-transform:uppercase;
+      color: var(--red);
+      font-weight:600;
+      margin-bottom:.8rem;
+    }
+    .section-title {
+      font-family: var(--font-head);
+      font-size: clamp(2.5rem,5vw,4rem);
+      color: var(--white);
+      letter-spacing:1px;
+      line-height:1.1;
+      margin-bottom:.8rem;
+    }
+    .section-desc {
+      color: var(--grey);
+      max-width:520px;
+      line-height:1.7;
+      font-weight:300;
+      margin-bottom:3rem;
+    }
+
+    .services-grid {
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px,1fr));
+      gap:1.5rem;
+    }
+
+    .service-card {
+      background: var(--dark2);
+      border: 1px solid rgba(255,255,255,.07);
+      border-radius:8px;
+      padding:2rem;
+      position:relative;
+      overflow:hidden;
+      transition: transform .3s, border-color .3s, box-shadow .3s;
+      cursor:default;
+    }
+    .service-card::before {
+      content:'';
+      position:absolute; top:0; left:0; right:0; height:2px;
+      background: linear-gradient(90deg, var(--red), transparent);
+      transform: scaleX(0); transform-origin:left;
+      transition: transform .3s;
+    }
+    .service-card:hover {
+      transform:translateY(-6px);
+      border-color: rgba(232,25,44,.3);
+      box-shadow: 0 12px 40px rgba(0,0,0,.4);
+    }
+    .service-card:hover::before { transform:scaleX(1); }
+
+    .service-icon {
+      width:48px; height:48px;
+      background: rgba(232,25,44,.12);
+      border-radius:8px;
+      display:flex; align-items:center; justify-content:center;
+      font-size:1.4rem;
+      margin-bottom:1.2rem;
+      transition: background .3s;
+    }
+    .service-card:hover .service-icon { background: rgba(232,25,44,.25); }
+
+    .service-name {
+      font-family: var(--font-head);
+      font-size:1.4rem;
+      letter-spacing:1px;
+      color: var(--white);
+      margin-bottom:.6rem;
+    }
+    .service-text {
+      font-size:.88rem;
+      color: var(--grey);
+      line-height:1.65;
+      font-weight:300;
+    }
+    .service-link {
+      display:inline-flex; align-items:center; gap:.4rem;
+      margin-top:1.2rem;
+      font-size:.82rem;
+      color: var(--red);
+      font-weight:600;
+      letter-spacing:.5px;
+      transition: gap .2s;
+    }
+    .service-link:hover { gap:.8rem; }
+
+    /* ════════════════════════════
+       ABOUT / TEAM STRIP
+    ════════════════════════════ */
+    #about {
+      background: var(--dark2);
+      border-top: 1px solid rgba(255,255,255,.06);
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      padding: 5rem 2rem;
+    }
+    .about-inner {
+      max-width:1100px; margin:0 auto;
+      display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center;
+    }
+    @media(max-width:700px){ .about-inner{ grid-template-columns:1fr; gap:2rem; } }
+
+    .about-visual {
+      position:relative; height:320px;
+    }
+    .about-box {
+      position:absolute;
+      background: var(--dark3);
+      border:1px solid rgba(232,25,44,.2);
+      border-radius:8px;
+    }
+    .about-box-1 {
+      width:70%; height:75%;
+      top:0; left:0;
+      background: linear-gradient(135deg, #1a0a0c, #1a1a1a);
+      display:flex; align-items:center; justify-content:center;
+    }
+    .about-box-1 .big-d {
+      font-family:var(--font-head);
+      font-size:8rem;
+      color: rgba(232,25,44,.15);
+      letter-spacing:-5px;
+      line-height:1;
+    }
+    .about-box-2 {
+      width:45%; height:50%;
+      bottom:0; right:0;
+      background: rgba(232,25,44,.08);
+      display:flex; flex-direction:column;
+      align-items:center; justify-content:center; gap:.3rem;
+    }
+    .about-box-2 .num {
+      font-family:var(--font-head);
+      font-size:3rem; color:var(--red);
+    }
+    .about-box-2 .txt {
+      font-size:.72rem; color:var(--grey);
+      letter-spacing:2px; text-transform:uppercase;
+    }
+
+    .about-content .section-desc { margin-bottom:2rem; }
+    .about-tags {
+      display:flex; flex-wrap:wrap; gap:.6rem;
+    }
+    .tag {
+      background: rgba(232,25,44,.1);
+      border:1px solid rgba(232,25,44,.25);
+      color: var(--light);
+      padding:.35rem .9rem;
+      border-radius:20px;
+      font-size:.78rem;
+      letter-spacing:.5px;
+    }
+
+    /* ════════════════════════════
+       WHY US
+    ════════════════════════════ */
+    #why {
+      padding: 6rem 2rem;
+      max-width:1100px; margin:0 auto;
+      text-align:center;
+    }
+    .why-grid {
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
+      gap:1.5rem;
+      margin-top:3rem;
+    }
+    .why-card {
+      padding:2rem 1.5rem;
+      border:1px solid rgba(255,255,255,.07);
+      border-radius:8px;
+      transition: border-color .3s, background .3s;
+    }
+    .why-card:hover {
+      border-color: rgba(232,25,44,.3);
+      background: rgba(232,25,44,.04);
+    }
+    .why-icon { font-size:2rem; margin-bottom:1rem; }
+    .why-title {
+      font-family:var(--font-head);
+      font-size:1.2rem; letter-spacing:1px;
+      color:var(--white); margin-bottom:.5rem;
+    }
+    .why-text { font-size:.85rem; color:var(--grey); line-height:1.6; font-weight:300; }
+
+    /* ════════════════════════════
+       CTA BANNER
+    ════════════════════════════ */
+    #cta {
+      margin: 0 2rem 6rem;
+      max-width:1100px;
+      margin-left:auto; margin-right:auto;
+      background: linear-gradient(135deg, #1a0608, #1a1a1a);
+      border:1px solid rgba(232,25,44,.25);
+      border-radius:12px;
+      padding:4rem 3rem;
+      text-align:center;
+      position:relative; overflow:hidden;
+    }
+    #cta::before {
+      content:'';
+      position:absolute; top:-50%; left:-10%;
+      width:400px; height:400px;
+      background: radial-gradient(circle, rgba(232,25,44,.15), transparent 70%);
+      pointer-events:none;
+    }
+    .cta-title {
+      font-family:var(--font-head);
+      font-size:clamp(2rem,5vw,3.5rem);
+      color:var(--white);
+      letter-spacing:1px;
+      margin-bottom:1rem;
+      position:relative; z-index:1;
+    }
+    .cta-sub {
+      color:var(--grey); font-size:1rem;
+      font-weight:300; margin-bottom:2rem;
+      position:relative; z-index:1;
+    }
+
+    /* ════════════════════════════
+       FOOTER
+    ════════════════════════════ */
+    footer {
+      background: var(--dark2);
+      border-top:1px solid rgba(255,255,255,.06);
+      padding:3rem 2rem 1.5rem;
+    }
+    .footer-inner {
+      max-width:1100px; margin:0 auto;
+      display:grid; grid-template-columns:2fr 1fr 1fr; gap:3rem;
+    }
+    @media(max-width:650px){ .footer-inner{ grid-template-columns:1fr; gap:2rem; } }
+
+    .footer-brand .brand-name {
+      font-family:var(--font-head);
+      font-size:1.8rem; letter-spacing:2px; color:var(--white);
+    }
+    .footer-brand .brand-name span { color:var(--red); }
+    .footer-brand p {
+      margin-top:.8rem; font-size:.85rem;
+      color:var(--grey); line-height:1.65; font-weight:300;
+      max-width:300px;
+    }
+    .footer-col h4 {
+      font-size:.75rem; letter-spacing:3px;
+      text-transform:uppercase; color:var(--red);
+      margin-bottom:1rem; font-weight:600;
+    }
+    .footer-col ul { list-style:none; }
+    .footer-col ul li {
+      margin-bottom:.6rem;
+    }
+    .footer-col ul li a {
+      font-size:.85rem; color:var(--grey);
+      transition: color .2s, padding-left .2s;
+      display:block;
+    }
+    .footer-col ul li a:hover { color:var(--red); padding-left:6px; }
+
+    .footer-bottom {
+      max-width:1100px; margin:2rem auto 0;
+      border-top:1px solid rgba(255,255,255,.06);
+      padding-top:1.2rem;
+      display:flex; justify-content:space-between; flex-wrap:wrap; gap:1rem;
+      font-size:.78rem; color:var(--grey);
+    }
+    .footer-bottom span { color:var(--red); }
+
+    /* ════════════════════════════
+       ANIMATIONS
+    ════════════════════════════ */
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(24px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+
+    /* ════════════════════════════
+       RESPONSIVE
+    ════════════════════════════ */
+    @media(max-width:480px){
+      .stat-item { padding:.8rem 1.5rem; }
+      #cta { padding:2.5rem 1.5rem; }
+      .topbar-logo { font-size:1.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ SIDEBAR OVERLAY ══ -->
+  <div id="sidebar-overlay" onclick="closeSidebar()"></div>
+
+  <!-- ══ SIDEBAR ══ -->
+  <nav id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">Di<span>SS</span>MaC</div>
+      <button id="close-btn" onclick="closeSidebar()">✕</button>
+    </div>
+
+    <ul class="nav-list">
+      <li>
+        <a href="#hero" class="nav-link" onclick="closeSidebar()">
+          <span>🏠 Home</span>
+        </a>
+      </li>
+      <li>
+        <a href="#about" class="nav-link" onclick="closeSidebar()">
+          <span>👥 Who We Are</span>
+        </a>
+      </li>
+
+      <div class="nav-divider"></div>
+
+      <!-- Services with submenu -->
+      <li>
+        <div class="nav-link" onclick="toggleServices(this)">
+          <span>⚙️ Services</span>
+          <span class="arrow">›</span>
+        </div>
+        <ul class="sub-menu" id="services-sub">
+          <li><a href="web-development.html" onclick="closeSidebar()">🌐 Website Design & Development</a></li>
+          <li><a href="advertisement.html" onclick="closeSidebar()">📢 Advertisement Creation</a></li>
+          <li><a href="business-systems.html" onclick="closeSidebar()">🖥️ Business System Creation</a></li>
+        </ul>
+      </li>
+
+      <div class="nav-divider"></div>
+
+      <li>
+        <a href="testimonials.html" class="nav-link" onclick="closeSidebar()">
+          <span>⭐ Testimonials</span>
+        </a>
+      </li>
+      <li>
+        <a href="pricing.html" class="nav-link" onclick="closeSidebar()">
+          <span>💰 Pricing</span>
+        </a>
+      </li>
+      <li>
+        <a href="contact.html" class="nav-link" onclick="closeSidebar()">
+          <span>📩 Contact Us</span>
+        </a>
+      </li>
+    </ul>
+
+    <!-- Sidebar footer -->
+    <div style="padding:1.2rem 1.5rem; border-top:1px solid rgba(255,255,255,.07);">
+      <p style="font-size:.72rem; color:var(--grey); letter-spacing:1px; text-transform:uppercase; margin-bottom:.5rem;">ONE VISION. LIMITLESS REACH.</p>
+      <p style="font-size:.75rem; color:var(--grey);">📞 [Your Phone Number]</p>
+    </div>
+  </nav>
+
+  <!-- ══ TOP BAR ══ -->
+  <header id="topbar">
+    <button id="hamburger" onclick="toggleSidebar()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="topbar-logo">Di<span>SS</span>MaC <span style="color:var(--grey);font-size:1rem;letter-spacing:1px;">GLOBAL</span></div>
+    <a href="contact.html" class="topbar-cta">Get a Quote</a>
+  </header>
+
+  <!-- ══ HERO ══ -->
+  <section id="hero">
+    <div class="hero-inner">
+      <div class="hero-badge">🇱🇰 Sri Lanka's Rising IT Company</div>
+      <h1 class="hero-title">
+        ONE <span class="red">VISION.</span><br>LIMITLESS<br>REACH.
+      </h1>
+      <p class="hero-sub">DiSSMaC Global — IT Solutions</p>
+      <p class="hero-desc">
+        We are a passionate team of young IT professionals delivering 
+        world-class web development, digital advertising, and smart 
+        business systems tailored for your success.
+      </p>
+      <div class="hero-btns">
+        <a href="#services" class="btn-primary">Explore Services</a>
+        <a href="contact.html" class="btn-outline">Contact Us →</a>
+      </div>
+    </div>
+    <div class="hero-scroll">
+      <div class="scroll-line"></div>
+      <span>Scroll</span>
+    </div>
+  </section>
+
+  <!-- ══ STATS ══ -->
+  <section id="stats">
+    <div class="stat-item">
+      <div class="stat-num">5+</div>
+      <div class="stat-label">Team Members</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">3</div>
+      <div class="stat-label">Core Services</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">100%</div>
+      <div class="stat-label">Dedication</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">24/7</div>
+      <div class="stat-label">Support</div>
+    </div>
+  </section>
+
+  <!-- ══ SERVICES ══ -->
+  <section id="services">
+    <p class="section-label">What We Do</p>
+    <h2 class="section-title">Our Core Services</h2>
+    <p class="section-desc">From stunning websites to smart business systems — we deliver complete digital solutions that drive real results.</p>
+
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon">🌐</div>
+        <div class="service-name">Web Design & Development</div>
+        <p class="service-text">We craft fast, modern, and visually stunning websites tailored to your brand. From landing pages to full e-commerce platforms — we build it all.</p>
+        <a href="web-development.html" class="service-link">Learn More →</a>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">📢</div>
+        <div class="service-name">Advertisement Creation</div>
+        <p class="service-text">Powerful digital ad campaigns that put your brand in front of the right audience. We create, manage and optimize ads that deliver real results.</p>
+        <a href="advertisement.html" class="service-link">Learn More →</a>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🖥️</div>
+        <div class="service-name">Business System Creation</div>
+        <p class="service-text">Custom-built business systems and software solutions designed to streamline your operations, boost productivity, and scale your business smarter.</p>
+        <a href="business-systems.html" class="service-link">Learn More →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ ABOUT STRIP ══ -->
+  <section id="about">
+    <div class="about-inner">
+      <div class="about-visual">
+        <div class="about-box about-box-1">
+          <div class="big-d">DiSS<br>MaC</div>
+        </div>
+        <div class="about-box about-box-2">
+          <div class="num">5</div>
+          <div class="txt">Passionate Minds</div>
+        </div>
+      </div>
+      <div class="about-content">
+        <p class="section-label">Who We Are</p>
+        <h2 class="section-title">Built by<br>Undergrads,<br>Built to Last.</h2>
+        <p class="section-desc">DiSSMaC Global is a team of 5 talented IT undergraduates from Sri Lanka, united by one vision — to deliver limitless digital solutions that make a real difference for businesses.</p>
+        <div class="about-tags">
+          <span class="tag">Web Development</span>
+          <span class="tag">Digital Marketing</span>
+          <span class="tag">System Design</span>
+          <span class="tag">E-Commerce</span>
+          <span class="tag">UI/UX</span>
+          <span class="tag">IT Consulting</span>
+        </div>
+        <a href="who-we-are.html" class="btn-primary" style="display:inline-block;margin-top:2rem;">Meet The Team →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ WHY US ══ -->
+  <section id="why">
+    <p class="section-label">Why DiSSMaC</p>
+    <h2 class="section-title">Why Choose Us?</h2>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-icon">🎓</div>
+        <div class="why-title">Qualified Team</div>
+        <p class="why-text">All our team members are IT undergraduates with up-to-date knowledge in modern technologies.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">⚡</div>
+        <div class="why-title">Fast Delivery</div>
+        <p class="why-text">We work efficiently to deliver your projects on time without compromising on quality.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">💡</div>
+        <div class="why-title">Fresh Ideas</div>
+        <p class="why-text">Young minds bring creative, innovative solutions that help your business stand out from the crowd.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🤝</div>
+        <div class="why-title">Dedicated Support</div>
+        <p class="why-text">We don't just build and leave — we provide ongoing support and assistance after every project.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ CTA ══ -->
+  <section id="cta" style="margin-bottom:0; border-radius:0; border-left:none; border-right:none; margin:0;">
+    <div style="max-width:1100px;margin:0 auto;padding:4rem 2rem;text-align:center;position:relative;z-index:1;">
+      <h2 class="cta-title">Ready to Grow Your<br><span style="color:var(--red)">Digital Presence?</span></h2>
+      <p class="cta-sub">Let's build something amazing together. Contact DiSSMaC Global today for a FREE consultation.</p>
+      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+        <a href="contact.html" class="btn-primary">Get a Free Consultation</a>
+        <a href="pricing.html" class="btn-outline">View Pricing →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ FOOTER ══ -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="brand-name">Di<span>SS</span>MaC <span style="color:var(--grey);font-size:1rem;">Global</span></div>
+        <p>One Vision. Limitless Reach. Your trusted IT solutions partner in Sri Lanka, delivering world-class digital services with passion and precision.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="web-development.html">Web Development</a></li>
+          <li><a href="advertisement.html">Advertisement</a></li>
+          <li><a href="business-systems.html">Business Systems</a></li>
+          <li><a href="pricing.html">Pricing</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="who-we-are.html">Who We Are</a></li>
+          <li><a href="testimonials.html">Testimonials</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 <span>DiSSMaC Global</span>. All rights reserved.</p>
+      <p>ONE VISION. <span>LIMITLESS REACH.</span></p>
+    </div>
+  </footer>
+
+  <!-- ══ SCRIPTS ══ -->
+  <script>
+    /* — Sidebar toggle — */
+    function toggleSidebar() {
+      const sidebar  = document.getElementById('sidebar');
+      const overlay  = document.getElementById('sidebar-overlay');
+      const burger   = document.getElementById('hamburger');
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('active');
+      burger.classList.toggle('open');
+    }
+    function closeSidebar() {
+      document.getElementById('sidebar').classList.remove('open');
+      document.getElementById('sidebar-overlay').classList.remove('active');
+      document.getElementById('hamburger').classList.remove('open');
+    }
+
+    /* — Services submenu — */
+    function toggleServices(el) {
+      const sub = document.getElementById('services-sub');
+      sub.classList.toggle('open');
+      el.classList.toggle('active-parent');
+    }
+
+    /* — Smooth scroll for internal anchors — */
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        e.preventDefault();
+        const target = document.querySelector(a.getAttribute('href'));
+        if (target) target.scrollIntoView({ behavior:'smooth' });
+      });
+    });
+
+    /* — Topbar shadow on scroll — */
+    window.addEventListener('scroll', () => {
+      const tb = document.getElementById('topbar');
+      tb.style.boxShadow = window.scrollY > 40
+        ? '0 4px 30px rgba(0,0,0,.6)' : 'none';
+    });
+  </script>
+</body>
+</html>
